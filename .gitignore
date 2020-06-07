@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 CL_data/
 training/
 1.png
@@ -9,6 +10,8 @@ MPP_BT_demo2.py
 
 
 
+=======
+>>>>>>> 20169861679c5f2706f9e30773d3ba706ce07c2d
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
