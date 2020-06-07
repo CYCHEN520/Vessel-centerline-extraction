@@ -9,12 +9,12 @@ class Cost():
         self.R_step = R_step
         self.intensity_range = intensity_range
 
-        self.W = W - 1
-        self.H = H - 1
-        self.Q = Q - 1
+        self.W = W
+        self.H = H
+        self.Q = Q
 
-        self.k_ = 1
-        self.y_ = 100
+        self.k_ = 10
+        self.y_ = 10
         self.n_ = 0.001
         self.N_ = 6
         self.LM_SIZE = 3
@@ -73,21 +73,23 @@ class Cost():
                     if (abs(q) + abs(i) + abs(j)) == 0:
                         return cost_
 
-                    for R in range(self.min_R, self.max_R + 1):
+                    for R in range(self.min_R, self.max_R + 1, self.R_step):
 
                         cross_line_value[R] = self.image_data[p[0]][p[1]][p[2]]
 
                         # 读取该方向上的灰度值
                         for R_l in range(1, R + 1):
-                            if (p[0] + i * R_l) > self.W or (p[0] + i * R_l) < 0 or p[1] + j * R_l > self.H or p[
-                                1] + j * R_l < 0 or p[2] + q * R_l > self.Q or p[2] + q * R_l < 0:
+                            if (p[0] + i * R_l) > self.W - 1 or (p[0] + i * R_l) < 0 or p[1] + j * R_l > self.H - 1 or \
+                                    p[
+                                        1] + j * R_l < 0 or p[2] + q * R_l > self.Q - 1 or p[2] + q * R_l < 0:
                                 d_front_value = -1000
                             else:
                                 d_front_value = self.image_data[p[0] + i * R_l][p[1] + j * R_l][p[2] + q * R_l]
                             cross_line_value[R + R_l] = d_front_value
 
-                            if (p[0] - i * R_l) > self.W or (p[0] - i * R_l) < 0 or p[1] - j * R_l > self.H or p[
-                                1] - j * R_l < 0 or p[2] - q * R_l > self.Q or p[2] - q * R_l < 0:
+                            if (p[0] - i * R_l) > self.W - 1 or (p[0] - i * R_l) < 0 or p[1] - j * R_l > self.H - 1 or \
+                                    p[
+                                        1] - j * R_l < 0 or p[2] - q * R_l > self.Q - 1 or p[2] - q * R_l < 0:
                                 d_back_value = -1000
                             else:
                                 d_back_value = self.image_data[p[0] - i * R_l][p[1] - j * R_l][p[2] - q * R_l]
@@ -144,7 +146,6 @@ class Cost():
                         # 中心线的灰度值
                         cross_line_value.append(self.image_data[p[0]][p[1]][p[2]])
 
-
                         # 如果中心点的灰度值超出范围，则定义为边界值
                         if cross_line_value[0] < self.intensity_range[0]:
                             cross_line_value[0] = self.intensity_range[0]
@@ -157,7 +158,7 @@ class Cost():
                         for R_l in range(1, R + 1):
                             if (p[0] + i * R_l) > self.W or (p[0] + i * R_l) < 0 or p[1] + j * R_l > self.H or p[
                                 1] + j * R_l < 0 or p[2] + q * R_l > self.Q or p[2] + q * R_l < 0:
-                                d_value = -1000
+                                d_value = 0
                             else:
                                 d_value = self.image_data[p[0] + i * R_l][p[1] + j * R_l][p[2] + q * R_l]
                             if self.intensity_range[0] <= d_value <= self.intensity_range[1]:
@@ -166,7 +167,7 @@ class Cost():
 
                             if (p[0] - i * R_l) > self.W or (p[0] - i * R_l) < 0 or p[1] - j * R_l > self.H or p[
                                 1] - j * R_l < 0 or p[2] - q * R_l > self.Q or p[2] - q * R_l < 0:
-                                d_value = -1000
+                                d_value = 0
                             else:
                                 d_value = self.image_data[p[0] - i * R_l][p[1] - j * R_l][p[2] - q * R_l]
                             if self.intensity_range[0] <= d_value <= self.intensity_range[1]:
